@@ -1,4 +1,20 @@
+using CarRentalApi.Data;
+using CarRentalApi.Data.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddDbContext<AppDbContext>(opts =>
+{
+    var connString = builder.Configuration.GetConnectionString("DefaultConnectionStrng");
+    opts.UseSqlServer(connString, options =>
+    {
+        options.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName.Split(',')[0]);
+    });
+});
+
+builder.Services.AddTransient<BookService>();
 
 // Add services to the container.
 
